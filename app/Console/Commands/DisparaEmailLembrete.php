@@ -31,16 +31,16 @@ class DisparaEmailLembrete extends Command
     public function handle(): void
     {
         $consultas = DB::select('select p.email, p.nome, inicio_consulta, cast(c.inicio_consulta as date) as data_consulta from consultas c inner join pacientes p on c.paciente_id = p.id
-        where cast(inicio_consulta as date) = cast((now() + interval 1 day) as date)');
-        
+        where cast(inicio_consulta as date) = cast(now() as date)');
+
         foreach($consultas as $consulta){
             $emailData = [
                 'title' => 'Sua consulta está chegando.',
-                'body' => "Olá, $consulta->nome você tem uma consulta agendada para amanhã às " .date("H:i", strtotime($consulta->inicio_consulta)).  " horas."
+                'body' => "Olá, $consulta->nome passando para lembrar que você tem uma consulta hoje às " .date("H:i", strtotime($consulta->inicio_consulta)).  " horas."
             ];
-    
+
             Mail::to($consulta->email)->send(new Email($emailData));
         }
-        
+
     }
 }
