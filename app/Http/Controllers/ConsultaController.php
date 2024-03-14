@@ -43,6 +43,7 @@ class ConsultaController extends Controller
         order by date_format(c.inicio_consulta, '%m')");
         $mes = DB::scalar("select substr(monthname(now()),1, 3)");
         $canais_de_origem = DB::select("SELECT COUNT(p.id) as qtd, c.canal from pacientes p inner JOIN canais_de_origem c on c.id = p.canal_origem_id where p.deleted_at is null GROUP BY canal order by qtd desc");
+        $aniversariantes = DB::table('pacientes')->whereMonth('dt_nascimento', date('m'))->get();
 
         if($forma_pagamentos){
             foreach($forma_pagamentos as $pg){
@@ -64,7 +65,7 @@ class ConsultaController extends Controller
             $chart_area = '';
         }
 
-        return view('home', [ 'receita' => $receita, 'consultas_realizadas' => $consultas_realizadas, 'consultas_agendadas' => $consultas_agendadas, 'nao_realizadas' => $nao_realizadas, 'pie' => $pie, 'chart_area' => $chart_area, 'gastos' => $gastos, 'mes' => $mes, 'canais_de_origem' => $canais_de_origem ]);
+        return view('home', [ 'receita' => $receita, 'consultas_realizadas' => $consultas_realizadas, 'consultas_agendadas' => $consultas_agendadas, 'nao_realizadas' => $nao_realizadas, 'pie' => $pie, 'chart_area' => $chart_area, 'gastos' => $gastos, 'mes' => $mes, 'canais_de_origem' => $canais_de_origem, 'aniversariantes' => $aniversariantes ]);
     }
 
     /*
