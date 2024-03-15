@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\EmailController;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Mail;
 use App\Mail\Email;
 
@@ -40,6 +41,8 @@ class DisparaEmailLembrete extends Command
             ];
 
             Mail::to($consulta->email)->send(new Email($emailData));
+            Log::info("Novo email enviado para $consulta->nome");
+            Log::info($emailData['body']);
         }
 
     }
